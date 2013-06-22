@@ -3,10 +3,9 @@
 #import <Linkedin_Oauth/Linkedin_Oauth.h>
 
 #import "OAuthLoginView.h"
-//#import "Constants.h"
 
-#define LinkedIn_API_KEY @"41uj8r12z76l"//@"fguk9s5b2md6"//@"ed1wlkwmd6h7"//@"lc4wci9c5rw7"
-#define LinkedIn_SECRET_KEY @"7I6XUWoRnVnTlsu4"//@"UHNYFg2V49LRrdgN"//@"0RAQWVszlPacGeP0"//@"nP5MsTwcpR4GkDLB"
+#define LinkedIn_API_KEY @"your API key"
+#define LinkedIn_SECRET_KEY @" your Secret key"
 
 
 
@@ -154,17 +153,8 @@
              object:self
              userInfo:nil];
             
-            if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"6.0")) {
-                
-                [self dismissViewControllerAnimated:YES completion:^{
-                    
-                }];
-            }
-            else
-            {
-                [self dismissModalViewControllerAnimated:YES];
-                
-            }
+            [self dismissModalViewControllerAnimated:YES];
+
         }
     }
     else
@@ -191,23 +181,7 @@
                                              callback:nil
                                     signatureProvider:nil] autorelease];
     
-    [request setHTTPMethod:@"POST"];
-    
-    //OARequestParameter * scopeParameter=[OARequestParameter requestParameter:@"scope" value:@"r_emailaddress r_fullprofile r_contactinfo r_basicprofile r_network"];
-    
-    //[request setParameters:[NSArray arrayWithObject:scopeParameter]];
-    
-    
-    
-    
-        
-    /*OARequestParameter *nameParam = [[OARequestParameter alloc] initWithName:@"scope" value:@"r_basicprofile+rw_nus+r_emailaddress"];
-    NSArray *params = [NSArray arrayWithObjects:nameParam, nil];
-    [request setParameters:params];
-    //OARequestParameter * scopeParameter=[OARequestParameter requestParameter:@"scope" value:@"r_emailaddress r_fullprofile rw_nus"];
-    //[request setParameters:[NSArray arrayWithObject:scopeParameter]];*/
-    
-    
+    [request setHTTPMethod:@"POST"];    
     
     OADataFetcher *fetcher = [[[OADataFetcher alloc] init] autorelease];
     [fetcher fetchDataWithRequest:request
@@ -221,7 +195,7 @@
     NSString *responseBody = [[NSString alloc] initWithData:data
                                                    encoding:NSUTF8StringEncoding];
     
-    NSLog(@"RESPONSE DATA  %@",responseBody);
+    NSLog(@"%@",responseBody);
     
     BOOL problem = ([responseBody rangeOfString:@"oauth_problem"].location != NSNotFound);
     if ( problem )
@@ -237,21 +211,8 @@
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"loginViewDidFinish"
      object:self];
-    
-    
-    
-    
-    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"6.0")) {
-        
-        [self dismissViewControllerAnimated:YES completion:^{
-            
-        }];
-    }
-    else
-    {
-        [self dismissModalViewControllerAnimated:YES];
-        
-    }
+    [self dismissModalViewControllerAnimated:YES];
+
     
     
     [responseBody release];
@@ -269,7 +230,6 @@
     self.consumer = [[OAConsumer alloc] initWithKey:apikey
                                         secret:secretkey
                                          realm:@"http://api.linkedin.com/"];
-//@"https://api.linkedin.com/uas/oauth/requestToken?scope=r_basicprofile+r_emailaddress"
     requestTokenURLString = @"https://api.linkedin.com/uas/oauth/requestToken";
     accessTokenURLString = @"https://api.linkedin.com/uas/oauth/accessToken";
     userLoginURLString = @"https://www.linkedin.com/uas/oauth/authorize";    
@@ -301,43 +261,14 @@
 -(IBAction)clickBarBtn:(id)sender
 {
     
-    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"6.0")) {
-        
-        [self dismissViewControllerAnimated:YES completion:^{
-            
-        }];
-    }
-    else
-    {
-        [self dismissModalViewControllerAnimated:YES];
-        
-    }
+    [self dismissModalViewControllerAnimated:YES];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
 	
 	NSLog(@"Api Key:%@		Secret Key:%@",apikey,secretkey);
-    
-    
-    //if ([apikey length] < 64 || [secretkey length] < 64)
-//    {
-//        UIAlertView *alert = [[UIAlertView alloc]
-//                          initWithTitle: @"OAuth Starter Kit"
-//                          message: @"You must add your apikey and secretkey.  See the project file readme.txt"
-//                          delegate: nil
-//                          cancelButtonTitle:@"OK"
-//                          otherButtonTitles:nil];
-//        [alert show];
-//        [alert release];
-//        
-//        // Notify parent and close this view
-//        [[NSNotificationCenter defaultCenter] 
-//         postNotificationName:@"loginViewDidFinish"        
-//         object:self];
-//        
-//        [self dismissModalViewControllerAnimated:YES];
-//    }
 
     [self requestTokenFromProvider];
 }
@@ -364,20 +295,6 @@
     [super didReceiveMemoryWarning];
     
     // Release any cached data, images, etc that aren't in use.
-}
-
-- (BOOL)isAuthorized {
-    if (!self.consumer) {
-        return NO;
-    }
-    
-	if (self.accessToken.key && self.accessToken.secret) {
-        if (self.accessToken.key.length > 0 && self.accessToken.secret.length > 0) {
-            return YES;
-        }
-    }
-    
-	return NO;
 }
 
 
